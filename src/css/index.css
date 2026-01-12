@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Gagalin', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -38,8 +38,9 @@ body {
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  font-weight: 999;
+  font-style: italic;
+  color: white;
   text-decoration: inherit;
 }
 a:hover {
