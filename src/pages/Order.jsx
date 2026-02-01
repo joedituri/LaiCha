@@ -1,10 +1,18 @@
 import { useState } from 'react'
 import FoodCard from '../components/FoodCard'
 import '../css/Order.css'
+import apiService from '../services/api'
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '../components/CheckoutForm';
+
+const stripePromise = loadStripe('pk_test_51SvqibBMAJhgVTFhJ9Y1KZ3w1FYJADpZat59wi92WWNk1Uq9yUjm9xJcgszKImBy0TUdIPov5vV4LPN6On1rjwvm00XCXOnD85'); 
 
 function Order() {
     const [cart, setCart] = useState([])
     const [showCart, setShowCart] = useState(false)
+    const [showPayment, setShowPayment] = useState(false);
+    const [orderData, setOrderData] = useState(null);
     const [deliveryInfo, setDeliveryInfo] = useState({
         name: '',
         phone: '',
@@ -73,16 +81,57 @@ function Order() {
         setDeliveryInfo({ ...deliveryInfo, [name]: value })
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        if (cart.length === 0) {
-            alert('Please add items to your cart first!')
-            return
-        }
-        // Here you would typically send the order to your backend
-        alert(`Order placed! Total: $${getTotal()}\nDelivery Date: ${deliveryInfo.deliveryDate}\nDelivery Time: ${deliveryInfo.deliveryTime}`)
-        console.log('Order details:', { cart, deliveryInfo, total: getTotal() })
+   const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (cart.length === 0) {
+        alert('Please add items to your cart first!');
+        return;
     }
+
+    const data = {
+        customerInfo: {
+            name: deliveryInfo.name,
+            phone: deliveryInfo.phone,
+            email: deliveryInfo.email,
+            address: deliveryInfo.address,
+            city: deliveryInfo.city,
+            zipCode: deliveryInfo.zipCode
+        },
+        deliveryDate: deliveryInfo.deliveryDate,
+        deliveryTime: deliveryInfo.deliveryTime,
+        specialInstructions: deliveryInfo.specialInstructions,
+        items: cart.map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        }))
+    };
+
+    setOrderData(data);
+    setShowPayment(true);
+};
+
+const handlePaymentSuccess = async (paymentIntentId) => {
+    try {
+        const response = await apiService.createOrder({
+            ...orderData,
+            paymentIntentId
+        });
+        
+        alert(`Order placed! Order ID: ${response.orderId}`);
+        
+        setCart([]);
+        setShowPayment(false);
+        setDeliveryInfo({
+            name: '', phone: '', email: '', address: '',
+            city: '', zipCode: '', deliveryDate: '', deliveryTime: '',
+            specialInstructions: ''
+        });
+    } catch (error) {
+        alert('Failed to save order');
+    }
+};
 
     return (
         <div className="order-container">
@@ -285,10 +334,23 @@ function Order() {
                                 onChange={handleInputChange}
                             />
                             
-                            <button type="submit" className="place-order-btn">
-                                Place Order - ${getTotal()}
-                            </button>
-                        </form>
+                                <button 
+                                    type="submit" 
+                                    className="place-order-btn"
+                                    style={{ display: showPayment ? 'none' : 'block' }}
+                                >
+                                    Continue to Payment
+                                </button>
+                            </form>
+
+                            {showPayment && (
+                                <Elements stripe={stripePromise}>
+                                    <CheckoutForm 
+                                        amount={parseFloat(getTotal())} 
+                                        onSuccess={handlePaymentSuccess}
+                                    />
+                                </Elements>
+                            )}
                     </div>
                 </div>
             </div>
