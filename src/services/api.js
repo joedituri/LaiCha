@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 class APIService {
   async createOrder(orderData) {
     try {
-      const response = await fetch(`${API_URL}/orders`, {
+      const response = await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ class APIService {
 
   async getOrder(orderId) {
     try {
-      const response = await fetch(`${API_URL}/orders/${orderId}`);
+      const response = await fetch(`${API_URL}/api/orders/${orderId}`);
       if (!response.ok) throw new Error('Failed to fetch order');
       return await response.json();
     } catch (error) {
