@@ -17,7 +17,7 @@ function CheckoutForm({ amount, onSuccess }) {
 
     try {
       // Create payment intent
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/create-payment-intent`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
