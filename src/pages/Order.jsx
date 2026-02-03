@@ -6,16 +6,16 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../components/CheckoutForm';
 
-const stripePromise = loadStripe('pk_test_51SvqibBMAJhgVTFhJ9Y1KZ3w1FYJADpZat59wi92WWNk1Uq9yUjm9xJcgszKImBy0TUdIPov5vV4LPN6On1rjwvm00XCXOnD85'); 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function Order() {
     const [cart, setCart] = useState([])
-    const [showCart, setShowCart] = useState(false)
     const [showPayment, setShowPayment] = useState(false);
     const [orderData, setOrderData] = useState(null);
     const [deliveryInfo, setDeliveryInfo] = useState({
         name: '',
         phone: '',
+        email: '',
         address: '',
         city: '',
         zipCode: '',
@@ -81,57 +81,57 @@ function Order() {
         setDeliveryInfo({ ...deliveryInfo, [name]: value })
     }
 
-   const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (cart.length === 0) {
-        alert('Please add items to your cart first!');
-        return;
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        if (cart.length === 0) {
+            alert('Please add items to your cart first!');
+            return;
+        }
 
-    const data = {
-        customerInfo: {
-            name: deliveryInfo.name,
-            phone: deliveryInfo.phone,
-            email: deliveryInfo.email,
-            address: deliveryInfo.address,
-            city: deliveryInfo.city,
-            zipCode: deliveryInfo.zipCode
-        },
-        deliveryDate: deliveryInfo.deliveryDate,
-        deliveryTime: deliveryInfo.deliveryTime,
-        specialInstructions: deliveryInfo.specialInstructions,
-        items: cart.map(item => ({
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        }))
+        const data = {
+            customerInfo: {
+                name: deliveryInfo.name,
+                phone: deliveryInfo.phone,
+                email: deliveryInfo.email,
+                address: deliveryInfo.address,
+                city: deliveryInfo.city,
+                zipCode: deliveryInfo.zipCode
+            },
+            deliveryDate: deliveryInfo.deliveryDate,
+            deliveryTime: deliveryInfo.deliveryTime,
+            specialInstructions: deliveryInfo.specialInstructions,
+            items: cart.map(item => ({
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            }))
+        };
+
+        setOrderData(data);
+        setShowPayment(true);
     };
 
-    setOrderData(data);
-    setShowPayment(true);
-};
-
-const handlePaymentSuccess = async (paymentIntentId) => {
-    try {
-        const response = await apiService.createOrder({
-            ...orderData,
-            paymentIntentId
-        });
-        
-        alert(`Order placed! Order ID: ${response.orderId}`);
-        
-        setCart([]);
-        setShowPayment(false);
-        setDeliveryInfo({
-            name: '', phone: '', email: '', address: '',
-            city: '', zipCode: '', deliveryDate: '', deliveryTime: '',
-            specialInstructions: ''
-        });
-    } catch (error) {
-        alert('Failed to save order');
-    }
-};
+    const handlePaymentSuccess = async (paymentIntentId) => {
+        try {
+            const response = await apiService.createOrder({
+                ...orderData,
+                paymentIntentId
+            });
+            
+            alert(`Order placed! Order ID: ${response.orderId}`);
+            
+            setCart([]);
+            setShowPayment(false);
+            setDeliveryInfo({
+                name: '', phone: '', email: '', address: '',
+                city: '', zipCode: '', deliveryDate: '', deliveryTime: '',
+                specialInstructions: ''
+            });
+        } catch (error) {
+            alert('Failed to save order');
+        }
+    };
 
     return (
         <div className="order-container">
@@ -270,6 +270,14 @@ const handlePaymentSuccess = async (paymentIntentId) => {
                                 value={deliveryInfo.phone}
                                 onChange={handleInputChange}
                             />
+
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                value={deliveryInfo.email}
+                                onChange={handleInputChange}
+                            />
                             
                             <input
                                 type="text"
@@ -334,23 +342,23 @@ const handlePaymentSuccess = async (paymentIntentId) => {
                                 onChange={handleInputChange}
                             />
                             
-                                <button 
-                                    type="submit" 
-                                    className="place-order-btn"
-                                    style={{ display: showPayment ? 'none' : 'block' }}
-                                >
-                                    Continue to Payment
-                                </button>
-                            </form>
+                            <button 
+                                type="submit" 
+                                className="place-order-btn"
+                                style={{ display: showPayment ? 'none' : 'block' }}
+                            >
+                                Continue to Payment
+                            </button>
+                        </form>
 
-                            {showPayment && (
-                                <Elements stripe={stripePromise}>
-                                    <CheckoutForm 
-                                        amount={parseFloat(getTotal())} 
-                                        onSuccess={handlePaymentSuccess}
-                                    />
-                                </Elements>
-                            )}
+                        {showPayment && (
+                            <Elements stripe={stripePromise}>
+                                <CheckoutForm 
+                                    amount={parseFloat(getTotal())} 
+                                    onSuccess={handlePaymentSuccess}
+                                />
+                            </Elements>
+                        )}
                     </div>
                 </div>
             </div>

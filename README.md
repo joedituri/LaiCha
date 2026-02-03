@@ -1,37 +1,32 @@
-🥐 Laicha Bakehouse
-A modern e-commerce web application for an artisan bakery, featuring online ordering with Stripe payment integration.
-Live Site: laichabakehouse.com
+# 🥐 Laicha Bakehouse
 
-Features
+A modern e-commerce web application for an artisan bakery, featuring online ordering with Stripe payment integration(Sandbox Only)
 
-🛒 Online ordering system with cart functionality
-💳 Secure payments via Stripe
-📱 Fully responsive design
-🍩 Dynamic menu loaded from database
-📦 Delivery scheduling with time slots
+**Live Site:** [laichabakehouse.com](https://laichabakehouse.com)
 
+---
 
-Tech Stack
-Frontend:
+## Features
 
-React 19
-React Router 7
-Vite (Rolldown)
-Tailwind CSS
+- 🛒 Online ordering system with cart functionality
+- 💳 Secure payments via Stripe
+- 📱 Fully responsive design
+- 🍩 Dynamic menu management
+- 📦 Delivery scheduling with time slots
+- 📧 Mailing list popup for promotions
 
-Backend:
+---
 
-Node.js / Express 5
-MongoDB / Mongoose
-Stripe API
+## Tech Stack
 
-Deployment:
+| Frontend       | Backend             | Deployment         |
+| -------------- | ------------------- | ------------------ |
+| React 19       | Node.js / Express 5 | Netlify (frontend) |
+| React Router 7 | MongoDB / Mongoose  | Railway (backend)  |
+| Vite           | Stripe API          |                    |
+| Tailwind CSS   |                     |                    |
 
-Frontend: Netlify
-Backend: Railway
+## 📬 Contact
 
-License
-MIT
-
-Contact
-Instagram: @laichabakehouse
+- Website: [laichabakehouse.com](https://laichabakehouse.com)
+- Instagram: [@laichabakehouse](https://www.instagram.com/laichabakehouse/)

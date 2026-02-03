@@ -7,12 +7,11 @@ function Home() {
     const [email, setEmail] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
 
-      useEffect(() => {
+    useEffect(() => {
         // Check if user has already seen the popup
         const hasSeenPopup = localStorage.getItem('hasSeenMailingListPopup')
         
-        //if (!hasSeenPopup) {
-        if (true) {    
+        if (!hasSeenPopup) {
             // Show popup after 3 seconds
             const timer = setTimeout(() => {
                 setShowPopup(true)
