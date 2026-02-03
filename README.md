@@ -1,15 +1,5 @@
 🥐 Laicha Bakehouse
-A modern e-commerce web application for an artisan bakery, featuring online ordering with Stripe payment integration.
-Live Site: laichabakehouse.com
-
-Features
-
-🛒 Online ordering system with cart functionality
-💳 Secure payments via Stripe
-📱 Fully responsive design
-🍩 Dynamic menu loaded from database
-📦 Delivery scheduling with time slots
-
+A modern e-commerce web application for an artisan bakery, featuring online ordering.
 
 Tech Stack
 Frontend:
@@ -31,7 +21,6 @@ Frontend: Netlify
 Backend: Railway
 
 License
-MIT
 
 Contact
 Instagram: @laichabakehouse
