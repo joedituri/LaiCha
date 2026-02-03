@@ -1,4 +1,5 @@
 🥐 Laicha Bakehouse
+
 A modern e-commerce web application for an artisan bakery, featuring online ordering.
 
 Tech Stack
