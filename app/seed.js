@@ -4,6 +4,7 @@ import MenuItem from './models/MenuItem.js';
 
 dotenv.config();
 
+
 const menuItems = [
   // Donuts
   { name: "Glazed Donut", description: "Classic glazed perfection", image: "/images/donuts.png", price: 3.50, category: "donuts" },
@@ -14,6 +15,7 @@ const menuItems = [
   // Bread
   { name: "Sourdough Loaf", description: "Artisan sourdough bread", image: "/images/bread.png", price: 6.00, category: "bread" },
 
+   // Dessert
   { name: "Macarons", description: "Classic French macarons", image: "/images/macarons.png", price: 4.50, category: "dessert" },
 
   { name: "Chocolate Chip Cookie", description: "Buttery cookies", image: "/images/cookie.png", price: 5.50, category: "dessert" },
@@ -38,10 +40,10 @@ async function seedDatabase() {
     });
 
     await mongoose.connection.close();
-    console.log('\n✅ Database seeded successfully!');
+    console.log('\n Database seeded successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error(' Error seeding database:', error);
     process.exit(1);
   }
 }
