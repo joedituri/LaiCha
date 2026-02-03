@@ -31,7 +31,7 @@ A modern e-commerce web application for an artisan bakery, featuring online orde
 | Vite           | Stripe API          |                    |
 | Tailwind CSS   |                     |                    |
 
-## 🚀 Quick Start
+##  Quick Start
 
 ```bash
 git clone https://github.com/yourusername/laicha.git
@@ -65,7 +65,7 @@ node server.js
 npm run dev
 ```
 
-## 📬 Contact
+##  Contact
 
 - Website: [laichabakehouse.com](https://laichabakehouse.com)
 - Instagram: [@laichabakehouse](https://www.instagram.com/laichabakehouse/)
