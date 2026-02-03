@@ -2,13 +2,10 @@
 
 A modern e-commerce web application for an artisan bakery, featuring online ordering with Stripe payment integration (sandbox only).
 
-<<<<<<< HEAD
-** Site:** [laichabakehouse.com](https://laichabakehouse.com)
-=======
-**Live Site:** [laichabakehouse.com](https://laichabakehouse.com) (inactive)
->>>>>>> 3a153e4c1d2970fdb8dfdf9294bab0abd6b84d92
+[laichabakehouse.com](https://laichabakehouse.com)
 
 ---
+
 <img width="535" height="882" alt="Screenshot from 2026-02-02 22-35-07" src="https://github.com/user-attachments/assets/9089c439-8058-4bfa-bd3a-9f4787053f99" />
 <img width="524" height="834" alt="Screenshot from 2026-02-02 22-35-02" src="https://github.com/user-attachments/assets/23cf4a28-44a9-4eee-92c0-2c575d2947e1" />
 <img width="1656" height="955" alt="Screenshot from 2026-02-02 22-23-37" src="https://github.com/user-attachments/assets/fcdaefbc-e9ec-466b-9597-99948e03fc94" />
@@ -42,6 +39,7 @@ A modern e-commerce web application for an artisan bakery, featuring online orde
 git clone https://github.com/yourusername/laicha.git
 cd laicha
 ```
+
 ### 2. Install Dependencies
 
 ```bash
@@ -59,13 +57,12 @@ cd ..
 **Terminal 1 - Backend:**
 cd app
 node server.js
+
 ```
 
 **Terminal 2 - Frontend:**
 npm run dev
 ```
-
-
 
 ## 📬 Contact
 
