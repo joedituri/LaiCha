@@ -133,15 +133,16 @@ function Order() {
         }
     }
 
-    // Category display names
+     // Category display names
     const categoryNames = {
         donuts: 'Donuts',
         croissants: 'Croissants',
-        bread: 'Bread'
+        bread: 'Bread',
+        dessert: 'Dessert'
     }
 
     // Category order
-    const categoryOrder = ['donuts', 'croissants', 'bread']
+    const categoryOrder = ['donuts', 'croissants', 'bread','dessert']
 
     return (
         <div className="order-container">

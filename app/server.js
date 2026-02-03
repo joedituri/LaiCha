@@ -13,6 +13,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use("/images", express.static("uploads"));
+
 // Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());

@@ -8,7 +8,7 @@ const menuItemSchema = new mongoose.Schema({
   category: { 
     type: String, 
     required: true,
-    enum: ['donuts', 'croissants', 'bread']
+    enum: ['donuts', 'croissants', 'bread','dessert']
   },
   available: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
