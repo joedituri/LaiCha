@@ -26,6 +26,39 @@ A modern e-commerce web application for an artisan bakery, featuring online orde
 | Vite           | Stripe API          |                    |
 | Tailwind CSS   |                     |                    |
 
+## 🚀 Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/laicha.git
+cd laicha
+```
+### 2. Install Dependencies
+
+```bash
+# Frontend dependencies
+npm install
+
+# Backend dependencies
+cd app
+npm install
+cd ..
+```
+
+### 3. Start Development Servers
+
+**Terminal 1 - Backend:**
+cd app
+node server.js
+```
+
+**Terminal 2 - Frontend:**
+npm run dev
+```
+
+
+
 ## 📬 Contact
 
 - Website: [laichabakehouse.com](https://laichabakehouse.com)
