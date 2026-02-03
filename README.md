@@ -2,7 +2,7 @@
 
 A modern e-commerce web application for an artisan bakery, featuring online ordering with Stripe payment integration (sandbox only).
 
-**Live Site:** [laichabakehouse.com](https://laichabakehouse.com)
+** Site:** [laichabakehouse.com](https://laichabakehouse.com)
 
 ---
 
