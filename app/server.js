@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Order from './models/Order.js';
+import MenuItem from './models/MenuItem.js';
 import Stripe from 'stripe';
 
 dotenv.config();
@@ -24,6 +25,34 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+// Get all menu items (grouped by category)
+app.get('/api/menu', async (req, res) => {
+  try {
+    const items = await MenuItem.find({ available: true }).sort({ category: 1, name: 1 });
+    
+    // Group items by category
+    const grouped = items.reduce((acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
+      }
+      acc[item.category].push({
+        id: item._id,
+        name: item.name,
+        description: item.description,
+        image: item.image,
+        price: item.price,
+        category: item.category
+      });
+      return acc;
+    }, {});
+
+    res.json(grouped);
+  } catch (error) {
+    console.error('Error fetching menu:', error);
+    res.status(500).json({ error: 'Failed to fetch menu items' });
+  }
 });
 
 // Create order
@@ -65,23 +94,19 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
+// Create payment intent
 app.post('/api/create-payment-intent', async (req, res) => {
   try {
     const { amount } = req.body;
-    
-    console.log('Creating payment intent for amount:', amount); // ADD THIS
-    console.log('Amount in cents:', Math.round(amount * 100)); // ADD THIS
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
       currency: 'usd',
     });
 
-    console.log('Payment intent created:', paymentIntent.id); // ADD THIS
-
     res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error('Stripe error:', error); // ADD THIS
+    console.error('Stripe error:', error);
     res.status(500).json({ error: 'Payment failed' });
   }
 });

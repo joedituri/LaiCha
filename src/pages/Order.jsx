@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FoodCard from '../components/FoodCard'
 import '../css/Order.css'
 import apiService from '../services/api'
@@ -10,8 +10,11 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function Order() {
     const [cart, setCart] = useState([])
-    const [showPayment, setShowPayment] = useState(false);
-    const [orderData, setOrderData] = useState(null);
+    const [menuItems, setMenuItems] = useState({})
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [showPayment, setShowPayment] = useState(false)
+    const [orderData, setOrderData] = useState(null)
     const [deliveryInfo, setDeliveryInfo] = useState({
         name: '',
         phone: '',
@@ -24,26 +27,23 @@ function Order() {
         specialInstructions: ''
     })
 
-    const menuItems = {
-        donuts: [
-            { id: 1, name: "Glazed Donut", description: "Classic glazed perfection", image: "🍩", price: 3.50, category: "donuts" },
-            { id: 2, name: "Chocolate Donut", description: "Rich chocolate glazed", image: "🍩", price: 3.75, category: "donuts" },
-            { id: 3, name: "Boston Cream", description: "Cream filled with chocolate", image: "🍩", price: 4.00, category: "donuts" },
-            { id: 4, name: "Jelly Donut", description: "Filled with raspberry jam", image: "🍩", price: 3.75, category: "donuts" }
-        ],
-        croissants: [
-            { id: 5, name: "Butter Croissant", description: "Flaky and buttery layers", image: "🥐", price: 4.50, category: "croissants" },
-            { id: 6, name: "Chocolate Croissant", description: "Filled with dark chocolate", image: "🥐", price: 5.00, category: "croissants" },
-            { id: 7, name: "Almond Croissant", description: "With almond cream filling", image: "🥐", price: 5.50, category: "croissants" },
-            { id: 8, name: "Ham & Cheese Croissant", description: "Savory croissant", image: "🥐", price: 6.00, category: "croissants" }
-        ],
-        bread: [
-            { id: 9, name: "Sourdough Loaf", description: "Artisan sourdough bread", image: "🍞", price: 6.00, category: "bread" },
-            { id: 10, name: "Baguette", description: "Classic French baguette", image: "🥖", price: 4.50, category: "bread" },
-            { id: 11, name: "Whole Wheat Bread", description: "Healthy whole grain", image: "🍞", price: 5.50, category: "bread" },
-            { id: 12, name: "Focaccia", description: "Italian herb focaccia", image: "🍞", price: 7.00, category: "bread" }
-        ]
-    }
+    // Fetch menu items from backend
+    useEffect(() => {
+        async function fetchMenu() {
+            try {
+                setLoading(true)
+                const menu = await apiService.getMenu()
+                setMenuItems(menu)
+                setError(null)
+            } catch (err) {
+                console.error('Failed to fetch menu:', err)
+                setError('Failed to load menu. Please try again later.')
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchMenu()
+    }, [])
 
     const addToCart = (item) => {
         const existingItem = cart.find(cartItem => cartItem.id === item.id)
@@ -82,11 +82,11 @@ function Order() {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         
         if (cart.length === 0) {
-            alert('Please add items to your cart first!');
-            return;
+            alert('Please add items to your cart first!')
+            return
         }
 
         const data = {
@@ -106,32 +106,42 @@ function Order() {
                 price: item.price,
                 quantity: item.quantity
             }))
-        };
+        }
 
-        setOrderData(data);
-        setShowPayment(true);
-    };
+        setOrderData(data)
+        setShowPayment(true)
+    }
 
     const handlePaymentSuccess = async (paymentIntentId) => {
         try {
             const response = await apiService.createOrder({
                 ...orderData,
                 paymentIntentId
-            });
+            })
             
-            alert(`Order placed! Order ID: ${response.orderId}`);
+            alert(`Order placed! Order ID: ${response.orderId}`)
             
-            setCart([]);
-            setShowPayment(false);
+            setCart([])
+            setShowPayment(false)
             setDeliveryInfo({
                 name: '', phone: '', email: '', address: '',
                 city: '', zipCode: '', deliveryDate: '', deliveryTime: '',
                 specialInstructions: ''
-            });
+            })
         } catch (error) {
-            alert('Failed to save order');
+            alert('Failed to save order')
         }
-    };
+    }
+
+    // Category display names
+    const categoryNames = {
+        donuts: 'Donuts',
+        croissants: 'Croissants',
+        bread: 'Bread'
+    }
+
+    // Category order
+    const categoryOrder = ['donuts', 'croissants', 'bread']
 
     return (
         <div className="order-container">
@@ -143,74 +153,44 @@ function Order() {
             <div className="order-content">
                 {/* Menu Section */}
                 <div className="menu-section">
-                    {/* Donuts */}
-                    <div className="menu-category">
-                        <h2>Donuts</h2>
-                        <div className="menu-grid">
-                            {menuItems.donuts.map(item => (
-                                <div key={item.id} className="menu-item">
-                                    <FoodCard 
-                                        name={item.name}
-                                        description={item.description}
-                                        image={item.image}
-                                        price={item.price}
-                                    />
-                                    <button 
-                                        className="add-to-cart-btn"
-                                        onClick={() => addToCart(item)}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            ))}
+                    {loading ? (
+                        <div className="loading-state">
+                            <p>Loading menu...</p>
                         </div>
-                    </div>
-
-                    {/* Croissants */}
-                    <div className="menu-category">
-                        <h2>Croissants</h2>
-                        <div className="menu-grid">
-                            {menuItems.croissants.map(item => (
-                                <div key={item.id} className="menu-item">
-                                    <FoodCard 
-                                        name={item.name}
-                                        description={item.description}
-                                        image={item.image}
-                                        price={item.price}
-                                    />
-                                    <button 
-                                        className="add-to-cart-btn"
-                                        onClick={() => addToCart(item)}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            ))}
+                    ) : error ? (
+                        <div className="error-state">
+                            <p>{error}</p>
+                            <button onClick={() => window.location.reload()}>
+                                Try Again
+                            </button>
                         </div>
-                    </div>
-
-                    {/* Bread */}
-                    <div className="menu-category">
-                        <h2>Bread</h2>
-                        <div className="menu-grid">
-                            {menuItems.bread.map(item => (
-                                <div key={item.id} className="menu-item">
-                                    <FoodCard 
-                                        name={item.name}
-                                        description={item.description}
-                                        image={item.image}
-                                        price={item.price}
-                                    />
-                                    <button 
-                                        className="add-to-cart-btn"
-                                        onClick={() => addToCart(item)}
-                                    >
-                                        Add to Cart
-                                    </button>
+                    ) : (
+                        categoryOrder.map(category => (
+                            menuItems[category] && menuItems[category].length > 0 && (
+                                <div key={category} className="menu-category">
+                                    <h2>{categoryNames[category]}</h2>
+                                    <div className="menu-grid">
+                                        {menuItems[category].map(item => (
+                                            <div key={item.id} className="menu-item">
+                                                <FoodCard 
+                                                    name={item.name}
+                                                    description={item.description}
+                                                    image={item.image}
+                                                    price={item.price}
+                                                />
+                                                <button 
+                                                    className="add-to-cart-btn"
+                                                    onClick={() => addToCart(item)}
+                                                >
+                                                    Add to Cart
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            )
+                        ))
+                    )}
                 </div>
 
                 {/* Checkout Section */}

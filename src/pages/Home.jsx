@@ -23,7 +23,7 @@ function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // Here you would typically send the email to your backend
+        //not currently working
         console.log('Email submitted:', email)
         setIsSubmitted(true)
         
@@ -40,38 +40,6 @@ function Home() {
         setShowPopup(false)
         localStorage.setItem('hasSeenMailingListPopup', 'true')
     }
-
-
-    const featuredItems = [
-        {
-            id: 1,
-            name: "Glazed Donuts",
-            description: "Light and fluffy donuts with our signature glaze",
-            image: "🍩",
-            price: 3.50
-        },
-        {
-            id: 2,
-            name: "Butter Croissant",
-            description: "Flaky, buttery layers baked to golden perfection",
-            image: "🥐",
-            price: 4.50
-        },
-        {
-            id: 3,
-            name: "Sourdough Bread",
-            description: "Artisan sourdough with a crispy crust",
-            image: "🍞",
-            price: 6.00
-        },
-        {
-            id: 4,
-            name: "Chocolate Croissant",
-            description: "Buttery croissant filled with rich dark chocolate",
-            image: "🥐",
-            price: 5.00
-        }
-    ]
 
     return (
         <div className="home-container">
@@ -139,23 +107,6 @@ function Home() {
                 </div>
             </section>
             
-            {/* Featured Items */}
-            <section className="featured">
-                <h2>Our Signature Bakes</h2>
-                <div className="drink-grid">
-                    {featuredItems.map(item => (
-                        <FoodCard 
-                            key={item.id}
-                            name={item.name}
-                            description={item.description}
-                            image={item.image}
-                            price={item.price}
-                        />
-                    ))}
-                </div>
-                <div className="view-all">
-                </div>
-            </section>
 
             {/* Info Banner */}
             <section className="info-banner">
