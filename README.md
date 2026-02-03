@@ -33,12 +33,12 @@ A modern e-commerce web application for an artisan bakery, featuring online orde
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
-
 ```bash
 git clone https://github.com/yourusername/laicha.git
 cd laicha
 ```
+
+First configure a .env file based on the example shown in .env.example
 
 ### 2. Install Dependencies
 
@@ -56,6 +56,7 @@ cd ..
 
 **Terminal 1 - Backend:**
 cd app
+npm run seed
 node server.js
 
 ```
